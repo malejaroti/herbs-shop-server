@@ -1,0 +1,74 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Environment Settings
+    // Module: Controls the module format of any JavaScript that gets emitted during compilation
+    "module": "commonjs", 
+
+    // "moduleResolution": "Node" ensures TypeScript resolves imports the same way Node.js does. With "module": "commonjs" this is the default, but setting it explicitly is clearer and prevents surprises if TypeScript changes defaults in the future.
+    "moduleResolution": "Node",   
+
+    // "target": Sets the version of the JS output (determines which JavaScript features TypeScript compiles down to)
+    "target": "ES2022", 
+
+    //  "lib": Sets the "input" JS version that TypeScript lets you use ( It provides type definitions for built-in JavaScript APIs, so that your editor recognizesthem  as valid and provides autocompletion for them).
+    "lib": ["ES2022"], 
+    "types": ["node"], // Project could be running in deno, bun or other runtimes and it would need other types.
+
+    // Other Outputs
+    "sourceMap": true, //nicer debugging in Node and VS Code breakpoints
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    // "esModuleInterop": true (Good) It tells TypeScript to insert a compatibility shim so that CommonJS "default" exports can be imported using ESM syntax (e.g: import express from "express"; instead of import * as express from "express";)
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+     // Optional. Forces files with top-level imports/exports to be treated as modules and everything else as script. Helps catch accidental globals, but default "auto" is fine.
+    "moduleDetection": "force",
+    // "skipLibCheck": true .(Good) It tells the compiler to skip type checking of all declaration files (.d.ts) in your project. This can speed up the compilation process by avoiding checking libraries you import
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true, //Good. Prevents Windows/macOS case mistakes.
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"]
+}
+
+
+// Ironhack recommended config: 
+// Step 3: add tsconfig.json
+// In the root directory, create a tsconfig.json file with the following content:
+
+// {
+//   "compilerOptions": {
+//     "target": "es2016",
+//     "moduleDetection": "force",
+//     "module": "commonjs",
+//     "outDir": "./dist",
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true, //Good. Prevents Windows/macOS case mistakes.
+//     "noImplicitAny": true, //Good but incomplete. It’s one piece of the strict suite. Better to turn strict: true and remove this (since strict already enables it).
+//     "skipLibCheck": true
+//   },
+//   "include": ["src/**/*"]
+// }
