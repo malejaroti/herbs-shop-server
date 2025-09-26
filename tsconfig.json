@@ -13,7 +13,8 @@
     "moduleResolution": "Node",   
 
     // "target": Sets the version of the JS output (determines which JavaScript features TypeScript compiles down to)
-    "target": "ES2022", 
+    // "target": "ES2022", 
+    "target": "esnext", 
 
     //  "lib": Sets the "input" JS version that TypeScript lets you use ( It provides type definitions for built-in JavaScript APIs, so that your editor recognizesthem  as valid and provides autocompletion for them).
     "lib": ["ES2022"], 
@@ -41,7 +42,7 @@
     // "esModuleInterop": true (Good) It tells TypeScript to insert a compatibility shim so that CommonJS "default" exports can be imported using ESM syntax (e.g: import express from "express"; instead of import * as express from "express";)
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
      // Optional. Forces files with top-level imports/exports to be treated as modules and everything else as script. Helps catch accidental globals, but default "auto" is fine.

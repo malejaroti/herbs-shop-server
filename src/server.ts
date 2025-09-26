@@ -1,6 +1,24 @@
-const app = require("./app");
+// require("dotenv").config();
+// import configDotEnv from "dotenv"
+import 'dotenv/config'
+import express from 'express';
+import handleErrors from './error-handling';
+import config from './config';
+import router from './routes/index.routes';
 
-// ℹ️ Sets the PORT for our app to have access to it. If no env has been set, we hard code it to 5005
+// Initialize the server
+const app = express();
+
+// Load and apply global middleware (CORS, JSON parsing, etc.) for server configurations
+config(app);
+
+// Define and apply route handlers
+app.use("/api", router);
+
+// Centralized error handling (must be placed after routes)
+handleErrors(app);
+
+// Define the server port (default: 5005)
 const PORT = process.env.PORT || 5005;
 
 app.listen(PORT, () => {
