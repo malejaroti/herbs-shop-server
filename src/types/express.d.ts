@@ -1,8 +1,9 @@
 import { JwtPayload } from "jsonwebtoken";
+import { Role } from "../generated/prisma";
 
 interface MyJwtPayload extends JwtPayload {
   user_id: string;
-  role: "admin" | "user";
+  role: Role;
 }
 
 declare global {

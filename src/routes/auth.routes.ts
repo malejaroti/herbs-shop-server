@@ -1,6 +1,6 @@
 import express from "express"
 import { Request, Response, NextFunction, Router} from 'express';
-import validateToken from '../middlewares/auth.middleware';
+import validateToken from '../middleware/auth.middleware';
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import prisma from "../db";
@@ -8,9 +8,6 @@ import { User } from "../generated/prisma";
 import { MyJwtPayload } from "../types/express";
 
 const router = Router();
-
-// How many rounds should bcrypt run the salt
-const saltRounds = 12;
 
 //POST "/api/auth/signup" -> Register information about the user (including credentials)
 router.post("/signup", async (req: Request, res: Response, next: NextFunction) => {
@@ -47,6 +44,7 @@ router.post("/signup", async (req: Request, res: Response, next: NextFunction) =
     }
 
     // If email is unique, proceed to hash the password
+    const saltRounds = 12; // How many rounds should bcrypt run the salt
     const hashPassword = await bcrypt.hash(password, saltRounds); 
 
     const response = await prisma.user.create({ data: req.body});
@@ -66,7 +64,7 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
   }
 
   try {
-    const foundUser = await prisma.user.findUnique({where:{ email: email }});
+    const foundUser = await prisma.user.findUnique({where:{ email }});
     if (foundUser === null) {
       res.status(400).json({ errorMessage: "No user registered with that email" });
       return;
@@ -79,17 +77,11 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
     } else {
       // res.status(200).json({errorMessage: "Password correct"})
       // Deconstruct the user object to omit the password
-      const { id, email } = foundUser;
+      const { id, role } = foundUser;
       console.log("foundUser:", foundUser);
 
       // Create an object that will be set as the token payload
-      const payload: MyJwtPayload= { id, email };
-      // console.log("payload:",payload)
-
-      // const payload = {
-      //     _id: foundUser._id,
-      //     email: foundUser.email
-      // };
+      const payload: MyJwtPayload= { user_id: id, role };
       // console.log("payload:",payload)
 
       // Ensure TOKEN_SECRET is defined
@@ -103,8 +95,6 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
       // Send the token as the response
       res.status(200).json({ authToken: authToken });
     }
-    // res.json{foundUser}
-    // res.send("testin, all good")
   } catch (error) {
     next(error);
   }
@@ -118,4 +108,3 @@ router.get("/verify", validateToken, (req: Request, res: Response) => {
 
 const authRouter = router
 export default authRouter
-// module.exports = authRouter;

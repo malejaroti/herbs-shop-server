@@ -38,7 +38,7 @@ export default function validateToken(req: Request, res: Response, next: NextFun
 }
 function validateAdminRole(req: Request, res: Response, next: NextFunction) {
 
-  if (req.payload && req.payload.role === "admin") {
+  if (req.payload && req.payload.role === "ADMIN") {
     next() // continue to the route
   } else {
     res.status(401).json({errorMessage: "you are not an admin"})

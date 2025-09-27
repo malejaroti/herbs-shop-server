@@ -15,8 +15,8 @@ datasource db {
 }
 
 enum Role {
-  USER  @map("user")
   ADMIN @map("admin")
+  CUSTOMER  @map("customer")
 }
 
 model User {
@@ -25,5 +25,5 @@ model User {
   lastName  String
   email     String @unique
   password  String
-  role      Role   @default(USER)
+  role      Role   @default(CUSTOMER)
 }
