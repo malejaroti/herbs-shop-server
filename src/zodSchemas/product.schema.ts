@@ -1,4 +1,5 @@
 import { z } from "zod";
+import slugify from "slugify";
 
 const OrganicCertSchema = z.preprocess(
   (v) => (v === "" || v === undefined ? null : v),
@@ -25,9 +26,9 @@ const VariantSchema = z.object({
 // If ProductCategory is a Prisma enum, mirror the options here:
 export const ProductCategoryEnum = z.enum(["HERBS","SPICES"]);
 
-export const CreateProductSchema = z.object({
+export const BaseCreateProductSchema = z.object({
   name: z.string().min(2).max(120).transform(s => s.trim()),
-  slug: z.string().min(2).max(140).regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers, and dashes"),
+  slug: z.string().min(2).max(140),
   latinName: z.string().max(140).optional(),
   bulkGrams: z.number().int().min(0),
   reorderAtGrams: z.number().int().min(0).optional(),
@@ -38,7 +39,22 @@ export const CreateProductSchema = z.object({
   variants: z.array(VariantSchema).default([]),
   categories: z.array(ProductCategoryEnum).min(1),
   images: z.array(ImageSchema).default([]),  // maps to Prisma Json
-}).superRefine((d, ctx) => {
+})
+
+const WithTransformedSlug = BaseCreateProductSchema.transform((data) => {
+  // normalize German chars and enforce rules
+  slugify.extend?.({ ä:"ae", ö:"oe", ü:"ue", Ä:"ae", Ö:"oe", Ü:"ue", ß:"ss" });
+
+  const normalizedSlug =
+    data.slug && data.slug.length > 0
+      ? slugify(data.slug, { lower: true, strict: true, locale: "de" })
+      : slugify(data.name, { lower: true, strict: true, locale: "de" });
+
+  return { ...data, slug: normalizedSlug };
+});
+
+
+export const CreateProductSchema = WithTransformedSlug.superRefine((d, ctx) => {
   if (d.active && d.variants.length === 0) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,

@@ -3,29 +3,13 @@ import prisma from '../db'
 import * as z from "zod"; 
 import { validateBody } from '../middleware/schemaValidation';
 import { CreateProductSchema, type CreateProductDTO } from '../zodSchemas/product.schema';
-// const prisma = require('../db')
+import { validateParams } from '../middleware/reqParamsValidation';
 
 const router = Router()
 
-type ProductImageDto = {
-  url: string;
-  alt: string;
-};
-
-interface ICreateProductDto{
-  name: string;
-  slug: string;
-  latinName: string;
-  bulkGrams: number;
-  reorderAtGrams: number;
-  descriptionMd: string;
-  originCountry: string;
-  organicCert: string;
-  active: boolean;
-  variants: [];
-  categories: string[];
-  images: ProductImageDto[];
-}
+const productIdParams = z.object({
+  productId: z.string().cuid(),
+});
 
 //POST /api/products - Create a new product
 router.post("/", validateBody(CreateProductSchema), async (req: Request, res: Response, next: NextFunction) => {
@@ -71,27 +55,23 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 })
 
 // GET one product
-router.get('/:productId', async (req: Request, res: Response, next: NextFunction) => {
-    const {productId} = req.params
+router.get('/:productId',  validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
+  const { productId } = req.params as { productId: string }; 
   try {
-    const response = await prisma.product.findUnique({where:{id : productId}})
-    res.status(200).json(response)
+    const response = await prisma.product.findUnique({ where: { id: productId } });
+    res.status(200).json(response);
   } catch (error) {
-    next(error)
+    next(error);
   }
 })
 
 // UPDATE the description of one product
-router.patch('/:productId', async (req: Request, res: Response, next: NextFunction) => {
-    const {productId} = req.params
-    const updatedDescription = req.body
+router.patch('/:productId', validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
+  const { productId } = req.params as { productId: string }; 
+  const { updatedDescription } = req.body
   try {
-    const foundFoundation = await prisma.product.findUnique({where:{id : productId}})
-    const updatedFoundations = {
-        ... foundFoundation.data,
-        "description" : updatedDescription
-    }
-    const response = await prisma.product.update({where:{id : productId}, data: updatedDescription})
+    const foundProduct = await prisma.product.findUnique({where:{id : productId}})
+    const response = await prisma.product.update({where:{id : productId}, data: {descriptionMd: updatedDescription}})
     res.status(200).json(response)
   } catch (error) {
     next(error)
@@ -99,14 +79,14 @@ router.patch('/:productId', async (req: Request, res: Response, next: NextFuncti
 })
 
 // UPDATE several fields of one product
-router.patch('/:productId', async (req: Request, res: Response, next: NextFunction) => {
-    const {productId} = req.params
+router.patch('/:productId', validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
+    const { productId } = req.params as { productId: string }; 
     const updates = req.body
 
   try {
-    const foundFoundation = await prisma.product.findUnique({where:{id : productId}})
+    const foundProduct = await prisma.product.findUnique({where:{id : productId}})
     const updatedFoundations = {
-        ... foundFoundation.data,
+        ... foundProduct,
         ...updates,
     }
     const response = await prisma.product.update({where:{id : productId}, data: updates})
@@ -117,8 +97,8 @@ router.patch('/:productId', async (req: Request, res: Response, next: NextFuncti
 })
 
 // DELETE one product
-router.delete('/:productId', async (req: Request, res: Response, next: NextFunction) => {
-    const {productId} = req.params
+router.delete('/:productId', validateParams(productIdParams), async (req, res, next) => {
+    const {productId} = req.params as { productId: string }; 
 
   try {
     const response = await prisma.product.delete({where:{id : productId}})
