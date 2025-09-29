@@ -1,6 +1,6 @@
 import express from "express"
 import { Request, Response, NextFunction, Router} from 'express';
-import validateToken from '../middleware/auth.middleware';
+import {validateToken} from '../middleware/auth.middleware';
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import prisma from "../db";

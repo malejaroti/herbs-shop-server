@@ -8,6 +8,10 @@ generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
+generator zod {
+  provider = "prisma-zod-generator"
+  output   = "../src/generated/zod"
+}
 
 datasource db {
   provider = "postgresql"
@@ -15,15 +19,61 @@ datasource db {
 }
 
 enum Role {
-  ADMIN @map("admin")
-  CUSTOMER  @map("customer")
+  ADMIN    @map("admin")
+  CUSTOMER @map("customer")
 }
 
+enum Currency {
+  EUR
+}
+
+enum ProductCategory {
+  HERBS   // Kräuter
+  SPICES   // Gewürze
+}
+
+enum TaxClass {
+  STANDARD // DE: 19%
+  REDUCED // DE:  7%
+  EXEMPT
+}
 model User {
-  id        String @id @default(cuid())
+  id        String   @id @default(cuid())
   firstName String
   lastName  String
-  email     String @unique
+  email     String   @unique
   password  String
-  role      Role   @default(CUSTOMER)
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Product {
+  id             String            @id @default(cuid())
+  name           String   
+  slug           String            @unique
+  latinName      String?
+  bulkGrams      Int               @default(0)
+  reorderAtGrams Int?
+  descriptionMd  String?
+  originCountry  String?
+  organicCert    String? // e.g., DE-ÖKO-001
+  active         Boolean           @default(true) //to show or not show in store
+  variants       ProductVariant[]
+  categories     ProductCategory[]
+  images         Json? // [ { url: "...", alt: "..." }, { url: "...", alt: "..." } ]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model ProductVariant {
+  id            String         @id @default(cuid())
+  productId     String
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku           String         @unique
+  name          String // e.g., "100 g", "Powder", "Whole leaf"
+  packSizeGrams Int
+  price         Int
+  currency      Currency       @default(EUR)
+  taxClass      TaxClass       @default(REDUCED)
+  active        Boolean        @default(true)
 }

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { MyJwtPayload } from '../types/express';
 
-export default function validateToken(req: Request, res: Response, next: NextFunction) {
+export function validateToken(req: Request, res: Response, next: NextFunction) {
     const unauthorized = () => res.status(401).json({ errorMessage: "Unauthorized" });
     console.log(req.headers)
     const authHeader = req.headers.authorization;
@@ -36,7 +36,7 @@ export default function validateToken(req: Request, res: Response, next: NextFun
         res.status(401).json({errorMessage: "Invalid or expired token"})
     }
 }
-function validateAdminRole(req: Request, res: Response, next: NextFunction) {
+export function validateAdminRole(req: Request, res: Response, next: NextFunction) {
 
   if (req.payload && req.payload.role === "ADMIN") {
     next() // continue to the route

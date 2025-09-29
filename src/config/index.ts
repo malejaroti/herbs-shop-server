@@ -24,8 +24,8 @@ export default function config(app : Application) {
 
     app.use(
         cors({
-            origin: allowedOrigins
-            // origin: [process.env.ORIGIN, " http://localhost:5174"]
+            // origin: allowedOrigins
+            origin: process.env.ORIGIN
         })
     );
   

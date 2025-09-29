@@ -22,4 +22,6 @@ ehthumbs.db
 # VS Code
 .vscode/*
 
-/src/generated/prisma
+/src/generated/
+
+draftModels.prisma
