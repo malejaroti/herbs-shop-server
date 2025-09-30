@@ -10,6 +10,7 @@ declare global {
   namespace Express {
     export interface Request {
       payload?: MyJwtPayload;
+      validatedBody?: unknown;
     }
   }
 }

@@ -10,7 +10,7 @@ export function validateBody<T>(schema: ZodType <T>) {
       return res.status(400).json({ errors: zerr.flatten() });
     }
     // attach parsed data so route can use the already-typed DTO
-    (req as any).validatedBody = parsed.data;
+    req.validatedBody = parsed.data;
     return next();
   };
 }

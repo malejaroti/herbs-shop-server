@@ -27,7 +27,7 @@ const VariantSchema = z.object({
 export const ProductCategoryEnum = z.enum(["HERBS","SPICES"]);
 
 export const BaseCreateProductSchema = z.object({
-  name: z.string().min(2).max(120).transform(s => s.trim()),
+  name: z.string().min(1).max(120).transform(s => s.trim()),
   slug: z.string().min(2).max(140),
   latinName: z.string().max(140).optional(),
   bulkGrams: z.number().int().min(0),
