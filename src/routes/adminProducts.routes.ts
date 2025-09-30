@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../db'
 import * as z from "zod"; 
 import { validateBody } from '../middleware/schemaValidation';
-import { CreateProductSchema, type CreateProductDTO } from '../zodSchemas/product.schema';
+import { CreateProductSchema, ProductSchema, type CreateProductDTO } from '../zodSchemas/product.schema';
 import { validateParams } from '../middleware/reqParamsValidation';
 import { CreateProductVariant_body, CreateProductVariantBodySchema, CreateProductVariantDTO, CreateProductVariantSchema } from '../zodSchemas/productVariant.schema';
 
@@ -96,10 +96,16 @@ router.post("/:productId/variants", validateBody(CreateProductVariantBodySchema)
   }
 });
 
-// GET /api/products - Get all Products
+// GET /api/admin/products - Get all Products with variant details
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const allProducts = await prisma.product.findMany()
+    const allProducts = await prisma.product.findMany({
+      include: {
+        variants: {
+          orderBy: [{ active: 'desc' }, { price: 'asc' }],
+        },
+      }
+    })
     res.status(200).json(allProducts)
   } catch (error) {
     next(error)
@@ -117,30 +123,26 @@ router.get('/:productId',  validateParams(productIdParams), async (req: Request,
   }
 })
 
-// UPDATE the description of one product
-router.patch('/:productId', validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
-  const { productId } = req.params as { productId: string }; 
-  const { updatedDescription } = req.body
-  try {
-    const foundProduct = await prisma.product.findUnique({where:{id : productId}})
-    const response = await prisma.product.update({where:{id : productId}, data: {descriptionMd: updatedDescription}})
-    res.status(200).json(response)
-  } catch (error) {
-    next(error)
-  }
-})
-
-// UPDATE api/products/:productId - Update several fields of one product
+// UPDATE api/admin/products/:productId - Update several fields of one product
 router.patch('/:productId', validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
     const { productId } = req.params as { productId: string }; 
     const updates = req.body
 
   try {
     const foundProduct = await prisma.product.findUnique({where:{id : productId}})
-    const updatedFoundations = {
+    if(!foundProduct){
+      return res.status(400).json({error: "There is no product with that Id" })
+    }
+    const updatedProduct = {
         ... foundProduct,
         ...updates,
     }
+    const validatedUpdates = ProductSchema.safeParse(updatedProduct);
+    if (!validatedUpdates.success) {
+        const zerr: z.ZodError = validatedUpdates.error;
+        return res.status(400).json({ errors: zerr.flatten() });
+    }
+
     const response = await prisma.product.update({where:{id : productId}, data: updates})
     res.status(200).json(response)
   } catch (error) {

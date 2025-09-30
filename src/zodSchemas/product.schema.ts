@@ -23,10 +23,11 @@ const VariantSchema = z.object({
   active: z.boolean().default(true),
 });
 
-// If ProductCategory is a Prisma enum, mirror the options here:
+// Should mirror Prisma enum for ProductCategory:
 export const ProductCategoryEnum = z.enum(["HERBS","SPICES"]);
 
-export const BaseCreateProductSchema = z.object({
+export const ProductSchema = z.object({
+  id: z.string().cuid(),
   name: z.string().min(1).max(120).transform(s => s.trim()),
   slug: z.string().min(2).max(140),
   latinName: z.string().max(140).optional(),
@@ -40,6 +41,10 @@ export const BaseCreateProductSchema = z.object({
   categories: z.array(ProductCategoryEnum).min(1),
   images: z.array(ImageSchema).default([]),  // maps to Prisma Json
 })
+
+const BaseCreateProductSchema = ProductSchema.omit({
+  id: true,
+});
 
 const WithTransformedSlug = BaseCreateProductSchema.transform((data) => {
   // normalize German chars and enforce rules
