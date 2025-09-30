@@ -34,7 +34,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 })
 
-// GET /api/products/:slug - Get one product
+// GET /api/products/:slug - Get one product with all variants
 router.get('/:slug',  validateParams(slugParams), async (req: Request, res: Response, next: NextFunction) => {
   const { slug } = req.params as { slug: string }; 
   try {
@@ -44,7 +44,6 @@ router.get('/:slug',  validateParams(slugParams), async (req: Request, res: Resp
         variants: {
           where: { active: true },
           orderBy: { price: 'asc' },
-          take: 1,
         }
       } 
     });
