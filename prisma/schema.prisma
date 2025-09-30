@@ -76,4 +76,6 @@ model ProductVariant {
   currency      Currency       @default(EUR)
   taxClass      TaxClass       @default(REDUCED)
   active        Boolean        @default(true)
+
+  @@unique([productId, name]) // ensures no two variants of the same product share the same name
 }
