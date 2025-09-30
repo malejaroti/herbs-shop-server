@@ -72,7 +72,7 @@ model ProductVariant {
   sku           String         @unique
   name          String // e.g., "100 g", "Powder", "Whole leaf"
   packSizeGrams Int
-  price         Int
+  price         Decimal        @db.Decimal(8,2)
   currency      Currency       @default(EUR)
   taxClass      TaxClass       @default(REDUCED)
   active        Boolean        @default(true)
