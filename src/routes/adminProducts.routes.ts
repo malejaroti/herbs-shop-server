@@ -12,6 +12,12 @@ const productIdParams = z.object({
   productId: z.string().cuid(),
 });
 
+const generateSKU = (productName: string, variantName: string): string => {
+  const prodCode = productName.slice(0,4)
+  const variantCode = variantName 
+  return `${prodCode}-${variantCode}`;
+}
+
 //POST /api/products - Create a new product
 router.post("/", validateBody(CreateProductSchema), async (req: Request, res: Response, next: NextFunction) => {
   console.log("Request body (new product data):", req.body);
@@ -46,13 +52,8 @@ router.post("/", validateBody(CreateProductSchema), async (req: Request, res: Re
   }
 });
 
-const generateSKU = (productName: string, variantName: string): string => {
-  const prodCode = productName.slice(0,4)
-  const variantCode = variantName 
-  return `${prodCode}-${variantCode}`;
-}
 
-//POST /api/products/:productId/variants - Create a new product variamt
+//POST /api/products/:productId/variants - Create a new product variant
 router.post("/:productId/variants", validateBody(CreateProductVariantBodySchema), async (req: Request, res: Response, next: NextFunction) => {
   console.log("Request body (new product variant):", req.validatedBody);
   const {name: variantName} = req.validatedBody as CreateProductVariant_body
