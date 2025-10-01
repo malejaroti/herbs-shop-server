@@ -3,6 +3,7 @@ import {validateToken, validateAdminRole} from '../middleware/auth.middleware';
 import authRouter from "../routes/auth.routes"
 import productsRouter from "./adminProducts.routes"
 import shopProductsRouter from "./shopProducts.routes";
+import uploadRouter from "./upload.routes";
 
 
 const router = Router();
@@ -14,6 +15,8 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 router.use("/auth", authRouter)
 router.use('/shop/products', shopProductsRouter); // public
 router.use("/admin/products", validateToken, validateAdminRole, productsRouter )
+router.use("/admin/upload", validateToken, validateAdminRole, uploadRouter);
+
 // router.use("/products", productsRouter )
 
 export default router
