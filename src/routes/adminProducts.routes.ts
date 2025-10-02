@@ -113,11 +113,48 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 })
 
-// GET /api/products/:productId - Get one product
+// GET /api/products/:productId - Get one product without variants
 router.get('/:productId',  validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
   const { productId } = req.params as { productId: string }; 
   try {
-    const response = await prisma.product.findUnique({ where: { id: productId } });
+    const response = await prisma.product.findUnique({ 
+      where: { id: productId }
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+})
+// GET /api/products/:productId/variants - Get one product with variants
+router.get('/:productId/withVariants',  validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
+  const { productId } = req.params as { productId: string }; 
+  try {
+    const response = await prisma.product.findUnique({ 
+      where: { id: productId },
+      include: {
+        variants: {
+          orderBy: [{ active: 'desc' }, { price: 'asc' }],
+        },
+      }
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+})
+
+// GET /api/products/:productId/variants - Get all the variants of one product
+router.get('/:productId/variants',  validateParams(productIdParams), async (req: Request, res: Response, next: NextFunction) => {
+  const { productId } = req.params as { productId: string }; 
+  try {
+    const response = await prisma.product.findUnique({ 
+      where: { id: productId },
+      select: {
+        variants: {
+          orderBy: [{ active: 'desc' }, { price: 'asc' }],
+        },
+      }
+    });
     res.status(200).json(response);
   } catch (error) {
     next(error);
@@ -134,20 +171,41 @@ router.patch('/:productId', validateParams(productIdParams), async (req: Request
     if(!foundProduct){
       return res.status(400).json({error: "There is no product with that Id" })
     }
-    const updatedProduct = {
-        ... foundProduct,
-        ...updates,
-    }
-    const validatedUpdates = ProductSchema.safeParse(updatedProduct);
-    if (!validatedUpdates.success) {
-        const zerr: z.ZodError = validatedUpdates.error;
-        return res.status(400).json({ errors: zerr.flatten() });
-    }
+    // const updatedProduct = {
+    //     ... foundProduct,
+    //     ...updates,
+    // }
+    // const validatedUpdates = ProductSchema.safeParse(updatedProduct);
+    // if (!validatedUpdates.success) {
+    //     const zerr: z.ZodError = validatedUpdates.error;
+    //     return res.status(400).json({ errors: zerr.flatten() });
+    // }
 
     const response = await prisma.product.update({where:{id : productId}, data: updates})
     res.status(200).json(response)
   } catch (error) {
     next(error)
+  }
+})
+
+// UPDATE api/admin/products/:productId/:variantId - Update one variant
+router.patch('/:productId/:variantId', async (req: Request, res: Response, next: NextFunction) => {
+    const { productId, variantId } = req.params as { productId: string; variantId: string }; 
+    const updates = req.body
+
+  try {
+    if (!variantId) {
+      return res.status(400).json({ error: "Variant ID is required" });
+    }
+    const foundProductVariant = await prisma.productVariant.findUnique({ where: { id: variantId } });
+    if (!foundProductVariant) {
+      return res.status(400).json({ error: "There is no product variant with that Id" });
+    }
+
+    const response = await prisma.productVariant.update({ where: { id: variantId }, data: updates });
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
   }
 })
 
