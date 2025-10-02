@@ -15,11 +15,16 @@ const slugParams = z.object({
   slug: z.string()
 });
 
-// GET /api/shop/products - Get all active products
+// GET /api/shop/products - Get all active products with the cheapest variant (to display an initial product price)
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const allProducts = await prisma.product.findMany({
         where: { active: true },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
         include: {
             variants: {
                 where: { active: true },
