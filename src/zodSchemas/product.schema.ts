@@ -24,7 +24,7 @@ const VariantSchema = z.object({
 });
 
 // Should mirror Prisma enum for ProductCategory:
-export const ProductCategoryEnum = z.enum(["HERBS","SPICES"]);
+export const ProductCategoryEnum = z.enum(['HERBS','SPICES']);
 
 export const ProductSchema = z.object({
   id: z.string().cuid(),
@@ -44,18 +44,21 @@ export const ProductSchema = z.object({
 
 const BaseCreateProductSchema = ProductSchema.omit({
   id: true,
+  slug: true,
 });
 
 const WithTransformedSlug = BaseCreateProductSchema.transform((data) => {
   // normalize German chars and enforce rules
   slugify.extend?.({ ä:"ae", ö:"oe", ü:"ue", Ä:"ae", Ö:"oe", Ü:"ue", ß:"ss" });
 
-  const normalizedSlug =
-    data.slug && data.slug.length > 0
-      ? slugify(data.slug, { lower: true, strict: true, locale: "de" })
-      : slugify(data.name, { lower: true, strict: true, locale: "de" });
+  // const normalizedSlug =
+  //   data.slug && data.slug.length > 0
+  //     ? slugify(data.slug, { lower: true, strict: true, locale: "de" })
+  //     : slugify(data.name, { lower: true, strict: true, locale: "de" });
 
-  return { ...data, slug: normalizedSlug };
+  const slug = slugify(data.name, { lower: true, strict: true, locale: "de" });
+
+  return { ...data, slug };
 });
 
 
