@@ -22,6 +22,7 @@ const generateSKU = (productName: string, variantName: string): string => {
 router.post("/", validateBody(CreateProductSchema), async (req: Request, res: Response, next: NextFunction) => {
   console.log("Request body (new product data):", req.body);
   const dto = req.validatedBody as CreateProductDTO;
+  console.log("Validated body:", dto);
   const newProduct = {
       name: dto.name,
       slug: dto.slug,
@@ -44,7 +45,7 @@ router.post("/", validateBody(CreateProductSchema), async (req: Request, res: Re
     }
 
     const created = await prisma.product.create( {data: newProduct} )
-    console.log("Created: ", created)
+    console.log("Product Created: ", created)
     res.status(201).json(created)
 
   } catch (error: any) {
@@ -171,16 +172,16 @@ router.patch('/:productId', validateParams(productIdParams), async (req: Request
     if(!foundProduct){
       return res.status(400).json({error: "There is no product with that Id" })
     }
-    // const updatedProduct = {
-    //     ... foundProduct,
-    //     ...updates,
-    // }
-    // const validatedUpdates = ProductSchema.safeParse(updatedProduct);
-    // if (!validatedUpdates.success) {
-    //     const zerr: z.ZodError = validatedUpdates.error;
-    //     return res.status(400).json({ errors: zerr.flatten() });
-    // }
-
+    const updatedProduct = {
+        ... foundProduct,
+        ...updates,
+    }
+    const validatedUpdates = ProductSchema.safeParse(updatedProduct);
+    if (!validatedUpdates.success) {
+        const zerr: z.ZodError = validatedUpdates.error;
+        return res.status(400).json({ errors: zerr.flatten() });
+    }
+    console.log("Product updates: ", updates)
     const response = await prisma.product.update({where:{id : productId}, data: updates})
     res.status(200).json(response)
   } catch (error) {
