@@ -1,25 +1,18 @@
-// prisma/seed.ts
-import { PrismaClient } from '../src/generated/prisma';
-import bcrypt from "bcryptjs";
-
+import { PrismaClient } from "../src/generated/prisma";
+const products = require("./seed-data-products.json");
+const productsVariants = require("./seed-data-productVariants.json");
 const prisma = new PrismaClient();
 
-async function main() {
-  const email = process.env.ADMIN_EMAIL || "admin-herbs-page@gmail.com";
-  const pass  = process.env.ADMIN_PASS  || "admin1234";
-  const firstName  = process.env.ADMIN_FIRST_NAME || "Maria";
-  const lastName  = process.env.ADMIN_LAST_NAME  || "Tibana";
-
-  const hashed = await bcrypt.hash(pass, 10);
-
-  await prisma.user.upsert({
-    where: { email },
-    create: { firstName, lastName, email, password: hashed, role: "ADMIN" },
-    update: { role: "ADMIN" },
-  });
+async function seedDatabase() {
+//  await prisma.product.createMany({ data: products });
+ await prisma.productVariant.createMany({ data: productsVariants });
 }
-
-main()
-  .then(() => console.log("✅ Seed done"))
-  .catch((e) => { console.error(e); process.exit(1); })
-  .finally(() => prisma.$disconnect());
+seedDatabase()
+ .then(() => console.log("Seeding complete"))
+ .catch((e) => {
+  console.error(e);
+  process.exit(1);
+ })
+ .finally(async () => {
+  await prisma.$disconnect();
+ });
