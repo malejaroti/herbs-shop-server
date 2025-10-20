@@ -25,5 +25,6 @@ ehthumbs.db
 # Prisma
 /src/generated/
 draftModels.prisma
+adminSeed.ts
 
 /dist
