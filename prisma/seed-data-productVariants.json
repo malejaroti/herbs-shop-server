@@ -1,0 +1,101 @@
+[
+	{
+		"id" : "cmg6l8vsm0003uufw4hqo3o7s",
+		"productId" : "cmg6dcxrq0000uulsvgsszrgi",
+		"sku" : "Kami-250g",
+		"name" : "250g",
+		"packSizeGrams" : 250,
+		"price" : 18.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg8k7u5z0004uua0nyi5jppx",
+		"productId" : "cmg6dcxrq0000uulsvgsszrgi",
+		"sku" : "Kami-700g",
+		"name" : "700g",
+		"packSizeGrams" : 700,
+		"price" : 50.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg6koivj0001uufwpf52ov61",
+		"productId" : "cmg6dcxrq0000uulsvgsszrgi",
+		"sku" : "Kami-100g",
+		"name" : "100g",
+		"packSizeGrams" : 100,
+		"price" : 7.50,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg6lbw690005uufwh4pxzvtd",
+		"productId" : "cmg6dcxrq0000uulsvgsszrgi",
+		"sku" : "Kami-500g",
+		"name" : "500g",
+		"packSizeGrams" : 500,
+		"price" : 35.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg94lgc30004uuk0loqhceny",
+		"productId" : "cmg8kecsn0006uua0wii5golb",
+		"sku" : "Pete-100g",
+		"name" : "100g",
+		"packSizeGrams" : 100,
+		"price" : 2.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg9419fm0001uuk0wb2u4br3",
+		"productId" : "cmg81ctai0001uu2go7ll72lw",
+		"sku" : "Beif-100g",
+		"name" : "100g",
+		"packSizeGrams" : 100,
+		"price" : 5.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg99zec90001uu94ee8ueqmd",
+		"productId" : "cmg80yrw80000uufsqanm2cgg",
+		"sku" : "Rosm-100g",
+		"name" : "100g",
+		"packSizeGrams" : 100,
+		"price" : 4.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg8kgu3o0009uua0h070sbu3",
+		"productId" : "cmg8kgu080007uua02t7cd86p",
+		"sku" : "Basi-100g",
+		"name" : "100g",
+		"packSizeGrams" : 100,
+		"price" : 9.00,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	},
+	{
+		"id" : "cmg8q6kxp0001uu2g62qymg8c",
+		"productId" : "cmg8kadq40005uua0j57d2sey",
+		"sku" : "Oreg-100g",
+		"name" : "100g",
+		"packSizeGrams" : 100,
+		"price" : 5.98,
+		"currency" : "EUR",
+		"taxClass" : "REDUCED",
+		"active" : true
+	}
+]
