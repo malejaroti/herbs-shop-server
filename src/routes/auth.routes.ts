@@ -64,16 +64,16 @@ router.post("/login", async (req: Request, res: Response, next: NextFunction) =>
   }
 
   try {
-    const foundUser = await prisma.user.findUnique({where:{ email }});
-    if (foundUser === null) {
-      res.status(400).json({ errorMessage: "No user registered with that email" });
-      return;
+    const foundUser = await prisma.user.findUnique({ where: { email } });
+
+    if (!foundUser) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, foundUser.password);
+
     if (!isPasswordCorrect) {
-      res.status(400).json({ errorMessage: "the password is not correct" });
-      return;
+      return res.status(401).json({ message: "Invalid email or password" });
     } else {
       // res.status(200).json({errorMessage: "Password correct"})
       // Deconstruct the user object to omit the password
