@@ -1,21 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
-// generator zod {
-//   provider = "prisma-zod-generator"
-//   output   = "../src/generated/zod"
-// }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id             String            @id @default(cuid())
+  name           String
+  slug           String            @unique
+  latinName      String?
+  bulkGrams      Int               @default(0)
+  reorderAtGrams Int?
+  descriptionMd  String?
+  originCountry  String?
+  organicCert    String?
+  active         Boolean           @default(true)
+  categories     ProductCategory[]
+  images         Json?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  variants       ProductVariant[]
+}
+
+model ProductVariant {
+  id            String   @id @default(cuid())
+  productId     String
+  sku           String   @unique
+  name          String
+  packSizeGrams Int
+  price         Decimal  @db.Decimal(8,2)
+  currency      Currency @default(EUR)
+  taxClass      TaxClass @default(REDUCED)
+  active        Boolean  @default(true)
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, name])
 }
 
 enum Role {
@@ -28,54 +62,12 @@ enum Currency {
 }
 
 enum ProductCategory {
-  HERBS   // Kräuter
-  SPICES   // Gewürze
+  HERBS
+  SPICES
 }
 
 enum TaxClass {
-  STANDARD // DE: 19%
-  REDUCED // DE:  7%
+  STANDARD
+  REDUCED
   EXEMPT
-}
-model User {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String
-  email     String   @unique
-  password  String
-  role      Role     @default(CUSTOMER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-model Product {
-  id             String            @id @default(cuid())
-  name           String   
-  slug           String            @unique
-  latinName      String?
-  bulkGrams      Int               @default(0)
-  reorderAtGrams Int?
-  descriptionMd  String?
-  originCountry  String?
-  organicCert    String? // e.g., DE-ÖKO-001
-  active         Boolean           @default(true) //to show or not show in store
-  variants       ProductVariant[]
-  categories     ProductCategory[]
-  images         Json? // [ { url: "...", alt: "..." }, { url: "...", alt: "..." } ]
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-}
-
-model ProductVariant {
-  id            String         @id @default(cuid())
-  productId     String
-  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
-  sku           String         @unique
-  name          String // e.g., "100 g", "Powder", "Whole leaf"
-  packSizeGrams Int
-  price         Decimal        @db.Decimal(8,2)
-  currency      Currency       @default(EUR)
-  taxClass      TaxClass       @default(REDUCED)
-  active        Boolean        @default(true)
-
-  @@unique([productId, name]) // ensures no two variants of the same product share the same name
 }
