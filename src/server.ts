@@ -1,16 +1,29 @@
 // require("dotenv").config();
 // import configDotEnv from "dotenv"
+import express, { Request, Response } from 'express';
+import prisma from './db';
 import 'dotenv/config'
-import express from 'express';
 import handleErrors from './error-handling';
 import config from './config';
 import router from './routes/index.routes';
+
 
 // Initialize the server
 const app = express();
 
 // Load and apply global middleware (CORS, JSON parsing, etc.) for server configurations
 config(app);
+
+// Health check endpoint — pinged by a cron job to prevent Supabase from going inactive
+app.get("/health", async (req: Request, res: Response) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`; // Simple query to check DB connectivity
+    res.status(200).json({ status: "ok" });
+  } catch (error) {
+    console.error('Health check failed:', error);
+    res.status(500).json({ status: "error", message: "Database connection failed" });
+  }
+});
 
 // Define and apply route handlers
 app.use("/api", router);
