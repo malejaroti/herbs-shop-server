@@ -11,7 +11,7 @@
 		"organicCert" : null,
 		"active" : true,
 		"categories" : ["HERBS"],
-		"images" : "[{\"alt\": \"Rosmarin\", \"url\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759397306\/herbs-shop-app\/hvjsxhhhqxascwbot6jz.jpg\"}]",
+		"images" : [{"alt":"Rosmarin", "url":"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759397306\/herbs-shop-app\/hvjsxhhhqxascwbot6jz.jpg"}],
 		"createdAt" : "2025-10-01T11:31:19.351Z",
 		"updatedAt" : "2025-10-01T11:31:19.351Z"
 	},
@@ -27,7 +27,7 @@
 		"organicCert" : null,
 		"active" : true,
 		"categories" : ["HERBS"],
-		"images" : "[{\"alt\": \"Basilikum\", \"url\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759401184\/herbs-shop-app\/h78ypxbzjbtk4ozqmuul.jpg\"}]",
+		"images" : [{"alt": "Basilikum", "url": "https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759401184\/herbs-shop-app\/h78ypxbzjbtk4ozqmuul.jpg"}],
 		"createdAt" : "2025-10-01T20:37:14.601Z",
 		"updatedAt" : "2025-10-01T20:37:14.601Z"
 	},
@@ -43,7 +43,7 @@
 		"organicCert" : null,
 		"active" : true,
 		"categories" : ["HERBS"],
-		"images" : "[{\"alt\": \"Oregano\", \"url\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759401250\/herbs-shop-app\/yakegkt9xdxtb9u4516u.jpg\"}]",
+		"images" : [{"alt": "Oregano", "url": "https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759401250\/herbs-shop-app\/yakegkt9xdxtb9u4516u.jpg"}],
 		"createdAt" : "2025-10-01T20:32:13.563Z",
 		"updatedAt" : "2025-10-01T20:32:13.563Z"
 	},
@@ -59,7 +59,7 @@
 		"organicCert" : null,
 		"active" : true,
 		"categories" : ["HERBS"],
-		"images" : "[{\"alt\": \"Getrocknete Kamillenblüten\", \"url\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759159161\/kamillenblueten_tcimux.jpg\"}]",
+		"images" : [{"alt": "Getrocknete Kamillenblüten", "url": "https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759159161\/kamillenblueten_tcimux.jpg"}],
 		"createdAt" : "2025-09-30T07:42:43.189Z",
 		"updatedAt" : "2025-09-30T12:17:52.266Z"
 	},
@@ -75,7 +75,7 @@
 		"organicCert" : null,
 		"active" : true,
 		"categories" : ["HERBS"],
-		"images" : "[{\"alt\": \"Petersilie\", \"url\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759392041\/herbs-shop-app\/avkuqy1trdec7wxnzxuj.jpg\"}]",
+		"images" : [{"alt": "Petersilie", "url": "https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759392041\/herbs-shop-app\/avkuqy1trdec7wxnzxuj.jpg"}],
 		"createdAt" : "2025-10-01T20:35:18.983Z",
 		"updatedAt" : "2025-10-01T20:35:18.983Z"
 	},
@@ -91,7 +91,7 @@
 		"organicCert" : null,
 		"active" : true,
 		"categories" : ["HERBS"],
-		"images" : "[{\"alt\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759326134\/timeline-app\/xjfpu8sl1ocxfg3c2mab.jpg\", \"url\": \"https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759326134\/timeline-app\/xjfpu8sl1ocxfg3c2mab.jpg\"}]",
+		"images" : [{"alt": "Beifüß", "url": "https:\/\/res.cloudinary.com\/dvrfurzie\/image\/upload\/v1759326134\/timeline-app\/xjfpu8sl1ocxfg3c2mab.jpg"}],
 		"createdAt" : "2025-10-01T11:42:14.346Z",
 		"updatedAt" : "2025-10-01T20:38:07.425Z"
 	}
